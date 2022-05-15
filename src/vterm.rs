@@ -18,6 +18,7 @@ pub struct VTerm {
     pub state_event_tx: Option<mpsc::Sender<StateEvent>>,
     pub state_ptr: NonNull<ffi::VTermState>,
 }
+unsafe impl Send for VTerm {}
 
 impl VTerm {
     pub fn new(size: &Size) -> VTerm {

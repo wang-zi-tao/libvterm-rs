@@ -1,0 +1,5 @@
+脚本启动于 2022-05-15 11:46:49+08:00 [TERM="xterm-256color" TTY="/dev/pts/24" COLUMNS="172" LINES="41"]
+[1;34mbenches[0m   Cargo.lock  [1;34mexamples[0m    flake.nix  Gemfile.lock  LICENSE    [1;34msrc[0m     test   TODO.md     [1;34mvendor[0m
+build.rs  [1;4;33mCargo.toml[0m  flake.lock  [1;4;33mGemfile[0m    Guardfile     [1;4;33mREADME.md[0m  [1;34mtarget[0m  [1;34mtests[0m  typescript  
+
+脚本完成于 2022-05-15 11:46:49+08:00 [COMMAND_EXIT_CODE="0"]
