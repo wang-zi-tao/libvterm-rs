@@ -1,11 +1,11 @@
 #![feature(test)]
 
-extern crate vterm_sys;
 extern crate test;
+extern crate vterm_sys;
 
-use vterm_sys::*;
 use std::io::prelude::*;
 use test::Bencher;
+use vterm_sys::*;
 
 // This seems pretty fast! 17,000ns per write.
 #[bench]
@@ -15,7 +15,7 @@ fn bench_get_screen_damage_event(b: &mut Bencher) {
         width: 80,
     });
     vterm.screen_receive_events(&ScreenCallbacksConfig::all());
-    vterm.screen_set_damage_merge(ffi::VTermDamageSize::VTermDamageRow);
+    vterm.screen_set_damage_merge(DamageSize::Row);
     let rx = vterm.screen_event_rx.take().unwrap();
 
     b.iter(|| {

@@ -87,19 +87,21 @@ impl VTerm {
         let mut fg_rgb: ffi::VTermColor = Default::default();
         let mut bg_rgb: ffi::VTermColor = Default::default();
         unsafe {
-            ffi::vterm_state_get_default_colors(self.state_ptr.get(), &mut fg_rgb, &mut bg_rgb)
+            ffi::vterm_state_get_default_colors(self.state_ptr.as_ptr(), &mut fg_rgb, &mut bg_rgb)
         };
 
-        (ColorRGB {
-            red: fg_rgb.red,
-            green: fg_rgb.green,
-            blue: fg_rgb.blue,
-        },
-         ColorRGB {
-            red: bg_rgb.red,
-            green: bg_rgb.green,
-            blue: bg_rgb.blue,
-        })
+        (
+            ColorRGB {
+                red: fg_rgb.red,
+                green: fg_rgb.green,
+                blue: fg_rgb.blue,
+            },
+            ColorRGB {
+                red: bg_rgb.red,
+                green: bg_rgb.green,
+                blue: bg_rgb.blue,
+            },
+        )
     }
 
     pub fn state_set_default_colors(&mut self, default_fg: &ColorRGB, default_bg: &ColorRGB) {
@@ -115,16 +117,18 @@ impl VTerm {
         };
 
         unsafe {
-            ffi::vterm_state_set_default_colors(self.state_ptr.get_mut(), &fg_rgb, &bg_rgb);
+            ffi::vterm_state_set_default_colors(self.state_ptr.as_ptr(), &fg_rgb, &bg_rgb);
         };
     }
 
     pub fn state_get_rgb_color_from_palette(&self, index: usize) -> ColorRGB {
         let mut ffi_color: ffi::VTermColor = Default::default();
         unsafe {
-            ffi::vterm_state_get_palette_color(self.state_ptr.get(),
-                                               index as c_int,
-                                               &mut ffi_color);
+            ffi::vterm_state_get_palette_color(
+                self.state_ptr.as_ptr(),
+                index as c_int,
+                &mut ffi_color,
+            );
         }
         ColorRGB {
             red: ffi_color.red,
@@ -156,7 +160,7 @@ impl VTerm {
 
     pub fn state_reset(&mut self, hard: bool) {
         unsafe {
-            ffi::vterm_state_reset(self.state_ptr.get_mut(), ::bool_to_int(hard));
+            ffi::vterm_state_reset(self.state_ptr.as_ptr(), ::bool_to_int(hard));
         }
     }
 
@@ -230,9 +234,11 @@ impl VTerm {
 
         unsafe {
             let self_ptr: *mut c_void = self as *mut _ as *mut c_void;
-            ffi::vterm_state_set_callbacks(self.state_ptr.get_mut(),
-                                           self.state_callbacks.as_ref().unwrap(),
-                                           self_ptr);
+            ffi::vterm_state_set_callbacks(
+                self.state_ptr.as_ptr(),
+                self.state_callbacks.as_ref().unwrap(),
+                self_ptr,
+            );
         }
     }
 }
@@ -248,16 +254,18 @@ mod tests {
             height: 2,
             width: 2,
         });
-        vterm.state_set_default_colors(&ColorRGB {
-                                           red: 200,
-                                           green: 201,
-                                           blue: 202,
-                                       },
-                                       &ColorRGB {
-                                           red: 0,
-                                           green: 1,
-                                           blue: 2,
-                                       });
+        vterm.state_set_default_colors(
+            &ColorRGB {
+                red: 200,
+                green: 201,
+                blue: 202,
+            },
+            &ColorRGB {
+                red: 0,
+                green: 1,
+                blue: 2,
+            },
+        );
         let (fg_rgb, bg_rgb) = vterm.state_get_default_colors();
 
         assert_eq!(fg_rgb.red, 200);
